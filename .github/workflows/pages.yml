@@ -33,6 +33,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify Hexo theme dependencies
+        run: |
+          npm ls hexo-theme-landscape --depth=0
+          npm ls hexo-renderer-stylus --depth=0
+
       - name: Adapt image paths for GitHub Pages
         run: python3 tools/fix-pages-paths.py
 
@@ -40,6 +45,24 @@ jobs:
         run: |
           npx hexo clean
           npx hexo generate --config _config.yml,_config.github.yml
+
+      - name: Verify generated site assets
+        shell: bash
+        run: |
+          echo "Checking generated files..."
+          test -s public/index.html
+          test -s public/css/style.css
+
+          echo "Landscape CSS:"
+          ls -lh public/css/style.css
+
+          echo "CSS reference in homepage:"
+          grep -n "css/style.css" public/index.html
+
+          echo "Files under public/css:"
+          find public/css -maxdepth 2 -type f -print
+
+          touch public/.nojekyll
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
