@@ -5,3 +5,13 @@ db.json
 *.log
 .DS_Store
 Thumbs.db
+# Word转换与本地备份
+backup-before-word-convert/
+word-convert/
+final-report.docx
+
+# Hexo多配置临时文件
+_multiconfig.yml
+
+# Hexo构建输出
+public/
