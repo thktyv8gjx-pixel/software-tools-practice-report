@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: github-pages
+  group: github-pages-branch
   cancel-in-progress: true
 
 jobs:
@@ -31,12 +31,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify Hexo dependencies
+      - name: Verify dependencies
         run: |
           npm ls hexo-theme-landscape --depth=0
           npm ls hexo-renderer-stylus --depth=0
 
-      - name: Adapt image paths for GitHub Pages
+      - name: Adapt image paths
         run: python3 tools/fix-pages-paths.py
 
       - name: Build Hexo site
@@ -45,20 +45,11 @@ jobs:
           npx hexo generate --config _config.yml,_config.github.yml
 
       - name: Verify generated files
-        shell: bash
         run: |
           test -s public/index.html
           test -s public/css/style.css
-
-          echo "CSS file:"
           ls -lh public/css/style.css
-
-          echo "CSS reference:"
           grep -n "css/style.css" public/index.html
-
-          echo "Generated file count:"
-          find public -type f | wc -l
-
           touch public/.nojekyll
 
       - name: Publish to gh-pages branch
