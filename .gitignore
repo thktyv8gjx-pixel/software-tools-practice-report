@@ -15,3 +15,6 @@ _multiconfig.yml
 
 # Hexo构建输出
 public/
+# Local report inputs and backups
+input-docx/
+backup-before-final-report-*/
